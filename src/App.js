@@ -1,32 +1,34 @@
-import React, { useEffect, useState } from "react";
-import Recipe from "./components/Recipe";
-import { FaClock, FaFire, FaUtensils, FaTachometerAlt } from "react-icons/fa";
+import React from "react";
+import Profile from "./components/Profile";
+import Statistics from "./components/Statistics";
+import FriendList from "./components/FriendList";
+import TransactionHistory from "./components/TransactionHistory";
+import user from "./data/user.json";
+import data from "./data/data.json";
+import friends from "./data/friends.json";
+import transactions from "./data/transactions.json";
 import "./styles.css";
 
-const icons = {
-  time: <FaClock />,
-  servings: <FaUtensils />,
-  calories: <FaFire />,
-  difficulty: <FaTachometerAlt />,
-};
-
 function App() {
-  const [recipes, setRecipes] = useState([]);
-
-  useEffect(() => {
-    fetch("/recipies.json")
-      .then((res) => res.json())
-      .then((data) => setRecipes(data));
-  }, []);
-
   return (
-    <div className="app">
-      <h1>GoITeens Recipes</h1>
-      <div className="recipes-list">
-        {recipes.map((recipe, index) => (
-          <Recipe key={index} recipe={recipe} icons={icons} />
-        ))}
-      </div>
+    <div className="App">
+      <h1>Соціальний профіль</h1>
+      <Profile
+        username={user.username}
+        tag={user.tag}
+        location={user.location}
+        avatar={user.avatar}
+        stats={user.stats}
+      />
+
+      <h1>Статистика</h1>
+      <Statistics title="Upload stats" stats={data} />
+
+      <h1>Друзі</h1>
+      <FriendList friends={friends} />
+
+      <h1>Історія транзакцій</h1>
+      <TransactionHistory items={transactions} />
     </div>
   );
 }
