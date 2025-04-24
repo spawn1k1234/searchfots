@@ -1,36 +1,34 @@
-import React from "react";
-import Profile from "./components/Profile";
-import Statistics from "./components/Statistics";
-import FriendList from "./components/FriendList";
-import TransactionHistory from "./components/TransactionHistory";
-import user from "./data/user.json";
-import data from "./data/data.json";
-import friends from "./data/friends.json";
-import transactions from "./data/transactions.json";
-import "./styles.css";
+import React, { useState } from "react";
+import styled from "styled-components";
+import stickers from "./data/stickers.json";
+import StickerList from "./components/StickerList";
+import Choice from "./components/Choice";
 
-function App() {
+const Container = styled.div`
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
+const Title = styled.h1`
+  text-align: center;
+  color: #333;
+`;
+
+const App = () => {
+  const [selected, setSelected] = useState(null);
+
+  const handleSelect = (label) => {
+    setSelected(label);
+  };
+
   return (
-    <div className="App">
-      <h1>Соціальний профіль</h1>
-      <Profile
-        username={user.username}
-        tag={user.tag}
-        location={user.location}
-        avatar={user.avatar}
-        stats={user.stats}
-      />
-
-      <h1>Статистика</h1>
-      <Statistics title="Upload stats" stats={data} />
-
-      <h1>Друзі</h1>
-      <FriendList friends={friends} />
-
-      <h1>Історія транзакцій</h1>
-      <TransactionHistory items={transactions} />
-    </div>
+    <Container>
+      <Title>Sticker App</Title>
+      <StickerList stickers={stickers} onSelect={handleSelect} />
+      <Choice selected={selected} />
+    </Container>
   );
-}
+};
 
 export default App;
