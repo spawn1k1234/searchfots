@@ -1,34 +1,39 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import stickers from "./data/stickers.json";
-import StickerList from "./components/StickerList";
-import Choice from "./components/Choice";
+import React, { useState, useEffect } from "react";
+import ContactForm from "./components/ContactForm";
+import ContactList from "./components/ContactList";
+import "./App.css";
 
-const Container = styled.div`
-  padding: 40px;
-  max-width: 800px;
-  margin: 0 auto;
-`;
+const LOCAL_STORAGE_KEY = "phonebook_contacts";
 
-const Title = styled.h1`
-  text-align: center;
-  color: #333;
-`;
+function App() {
+  const [contacts, setContacts] = useState([]);
 
-const App = () => {
-  const [selected, setSelected] = useState(null);
+  useEffect(() => {
+    const storedContacts = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+    if (storedContacts) {
+      setContacts(storedContacts);
+    }
+  }, []);
 
-  const handleSelect = (label) => {
-    setSelected(label);
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
+  }, [contacts]);
+
+  const addContact = (contact) => {
+    setContacts([...contacts, contact]);
+  };
+
+  const deleteContact = (id) => {
+    setContacts(contacts.filter((c) => c.id !== id));
   };
 
   return (
-    <Container>
-      <Title>Sticker App</Title>
-      <StickerList stickers={stickers} onSelect={handleSelect} />
-      <Choice selected={selected} />
-    </Container>
+    <div className="app">
+      <h1>Телефонна книга</h1>
+      <ContactForm onAdd={addContact} />
+      <ContactList contacts={contacts} onDelete={deleteContact} />
+    </div>
   );
-};
+}
 
 export default App;
