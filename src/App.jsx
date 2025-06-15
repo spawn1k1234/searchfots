@@ -15,17 +15,18 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalImg, setModalImg] = useState(null);
+  const [mode, setMode] = useState("photo");
 
   useEffect(() => {
     if (!query) return;
     setLoading(true);
-    fetchImages(query, page)
+    fetchImages(query, page, 12, mode)
       .then((newImages) => {
         setImages((prev) => (page === 1 ? newImages : [...prev, ...newImages]));
       })
       .catch(console.error)
       .finally(() => setLoading(false));
-  }, [query, page]);
+  }, [query, page, mode]);
 
   const handleSearch = (newQuery) => {
     if (newQuery === query) return;
@@ -49,7 +50,7 @@ function App() {
   return (
     <div className="App">
       <AnimatedBackground />
-      <Searchbar onSubmit={handleSearch} />
+      <Searchbar onSubmit={handleSearch} mode={mode} setMode={setMode} />
       <ImageGallery images={images} onImageClick={openModal} />
       {loading && <Loader />}
       {images.length > 0 && !loading && <Button onClick={loadMore} />}
@@ -59,4 +60,3 @@ function App() {
 }
 
 export default App;
-//Ss

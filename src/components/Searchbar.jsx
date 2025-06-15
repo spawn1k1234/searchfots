@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 
-export default function Searchbar({ onSubmit }) {
+export default function Searchbar({ onSubmit, mode, setMode }) {
   const [input, setInput] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(input.trim());
+    if (input.trim()) {
+      onSubmit(input.trim());
+    }
   };
 
   return (
@@ -18,11 +21,26 @@ export default function Searchbar({ onSubmit }) {
           type="text"
           autoComplete="off"
           autoFocus
-          placeholder="Search images and photos"
+          placeholder={`Search ${mode === "gif" ? "GIFs" : "images"}...`}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
       </form>
+
+      <div className="search-mode-buttons">
+        <button
+          className={`mode-button ${mode === "photo" ? "active" : ""}`}
+          onClick={() => setMode("photo")}
+        >
+          Pictures
+        </button>
+        <button
+          className={`mode-button ${mode === "gif" ? "active" : ""}`}
+          onClick={() => setMode("gif")}
+        >
+          GIF-ки
+        </button>
+      </div>
     </header>
   );
 }
